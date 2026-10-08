@@ -4,3 +4,47 @@ body {
     background-color: #07090d;
     color: white;
 }
+
+/* ===== Icônes de la navbar ===== */
+.nav-icon {
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease,
+        color 0.3s ease;
+}
+
+/* Couleurs par défaut */
+.nav-home .nav-icon {
+    color: #22d3ee;
+}
+.nav-about .nav-icon {
+    color: #c084fc;
+}
+.nav-skills .nav-icon {
+    color: #f472b6;
+}
+.nav-project .nav-icon {
+    color: #fb923c;
+}
+.nav-contact .nav-icon {
+    color: #facc15;
+}
+.nav-cv .nav-icon {
+    color: #4ade80;
+}
+.nav-admin .nav-icon {
+    color: #f87171;
+}
+
+/* Hover */
+.nav-link:hover .nav-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Lien actif */
+.nav-link.active .nav-icon {
+    color: #67e8f9;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.9));
+}
