@@ -1,0 +1,12 @@
+# Identifiants (ne jamais publier)
+config/config.php
+.env
+
+# Dépendances
+node_modules/
+
+# Système / éditeur
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

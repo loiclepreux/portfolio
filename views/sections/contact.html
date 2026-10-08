@@ -1,0 +1,179 @@
+<main
+    class="min-h-screen bg-[#090b10] px-8 py-20 pr-32 text-white md:px-16 md:pr-40"
+>
+    <!-- HEADER -->
+    <section class="mb-16">
+        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-cyan-400">
+            Contact
+        </p>
+
+        <h1 class="mb-6 text-4xl font-bold text-white md:text-5xl">
+            Me contacter
+        </h1>
+
+        <p class="max-w-3xl text-base leading-8 text-gray-400">
+            Tu peux me contacter pour échanger autour de mon parcours, de mes
+            projets, d’une opportunité, ou simplement pour discuter
+            développement web et conception d’applications.
+        </p>
+    </section>
+
+    <div class="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+        <!-- FORMULAIRE -->
+        <section
+            class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+        >
+            <div class="mb-8 flex items-center gap-3">
+                <div
+                    class="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
+                >
+                    <span class="text-xl">💬</span>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-white">
+                    Formulaire de contact
+                </h2>
+            </div>
+
+            <form id="contactForm" class="space-y-6">
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Votre nom"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                />
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Votre email"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                />
+
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Sujet"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                />
+
+                <textarea
+                    rows="6"
+                    name="message"
+                    placeholder="Votre message"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black hover:bg-cyan-300"
+                >
+                    ✉ Envoyer
+                </button>
+
+                <p id="contactMessage" class="hidden text-sm text-cyan-300"></p>
+            </form>
+        </section>
+
+        <!-- INFOS -->
+        <aside class="space-y-6">
+            <!-- INFOS PROFIL -->
+            <div
+                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+            >
+                <h2 class="mb-6 text-2xl font-semibold text-white">
+                    Informations
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- EMAIL -->
+                    <div
+                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                    >
+                        <div
+                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            📧
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Email</p>
+                            <a id="profileEmail" href="#" class="text-white">
+                                Chargement...
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- TELEPHONE -->
+                    <div
+                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                    >
+                        <div
+                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            📱
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Téléphone</p>
+                            <p id="profilePhone" class="text-white">
+                                Non renseigné
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- LINKEDIN -->
+                    <div
+                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                    >
+                        <div
+                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            💼
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">LinkedIn</p>
+                            <a
+                                id="profileLinkedin"
+                                href="#"
+                                target="_blank"
+                                class="text-white"
+                            >
+                                Chargement...
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- LOCALISATION -->
+                    <div
+                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                    >
+                        <div
+                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            📍
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Localisation</p>
+                            <p id="profileLocation" class="text-white">
+                                Chargement...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DISPONIBILITE -->
+            <div
+                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+            >
+                <h2 class="mb-4 text-2xl font-semibold text-white">
+                    Disponibilité
+                </h2>
+
+                <p class="leading-8 text-gray-400">
+                    Je suis disponible pour échanger autour d’une opportunité,
+                    d’un projet ou d’une collaboration.
+                </p>
+            </div>
+        </aside>
+    </div>
+</main>

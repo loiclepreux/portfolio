@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>mon portfolio</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        />
+        <script src="assets/js/script.js" defer></script>
+        <link rel="stylesheet" href="assets/css/style.css" />
+    </head>
+    <body>
+        <aside
+            class="fixed right-0 top-0 z-50 flex h-screen w-24 flex-col items-center justify-center border-l border-cyan-500/10 bg-[#0b0d12]"
+        >
+            <div
+                class="mb-10 rotate-90 text-xs font-semibold tracking-[0.45em] text-cyan-400"
+            >
+                LOÏC
+            </div>
+
+            <nav class="flex flex-col items-center gap-5">
+                <a
+                    href="index.php?p="
+                    data-page="home"
+                    title="Accueil"
+                    class="nav-link nav-home relative flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-house text-xl nav-icon"></i>
+                </a>
+
+                <a
+                    href="index.php?p=about"
+                    data-page="about"
+                    title="About"
+                    class="nav-link nav-about relative flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-user text-xl nav-icon"></i>
+                </a>
+
+                <a
+                    href="index.php?p=skills"
+                    data-page="skills"
+                    title="Skills"
+                    class="nav-link nav-skills relative flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-brain text-xl nav-icon"></i>
+                </a>
+
+                <a
+                    href="index.php?p=project"
+                    data-page="project"
+                    title="Project"
+                    class="nav-link nav-project relative flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-briefcase text-xl nav-icon"></i>
+                </a>
+
+                <a
+                    href="index.php?p=contact"
+                    data-page="contact"
+                    title="Contact"
+                    class="nav-link nav-contact relative flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-envelope text-xl nav-icon"></i>
+                </a>
+
+                <a
+                    href="https://trite-angora-962.notion.site/LEPREUX-Lo-c-D-veloppeur-Web-Full-Stack-2f1a8c7c0ea6801f8362f02d04d15f45"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="CV"
+                    class="nav-link nav-cv relative z-[999] flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-file text-xl nav-icon"></i>
+                </a>
+
+                <button
+                    id="open-login-modal"
+                    type="button"
+                    title="Connexion admin"
+                    class="nav-link nav-admin relative z-[999] flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/10 bg-white/5 text-gray-400 transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
+                >
+                    <i class="fa-solid fa-lock text-xl nav-icon"></i>
+                </button>
+            </nav>
+        </aside>
+
