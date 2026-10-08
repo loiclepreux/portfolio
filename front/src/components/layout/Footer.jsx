@@ -1,0 +1,9 @@
+function Footer() {
+    return (
+        <footer className="border-t border-cyan-500/10 py-3 text-center text-[11px] text-gray-500">
+            © 2026 Loïc Lepreux — Portfolio développeur web
+        </footer>
+    );
+}
+
+export default Footer;
