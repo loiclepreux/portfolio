@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCreationDetail();
     loadProfile();
     initLoginModal();
+    loadUniverseTiles();
 });
 
 function initNavbarActiveState() {
@@ -623,6 +624,65 @@ async function loadCreationDetail() {
                 : ""
         }
     `;
+}
+
+async function loadUniverseTiles() {
+    const container = document.getElementById("universeTiles");
+
+    // On n'est pas sur l'accueil : on ne fait rien
+    if (!container) return;
+
+    let creations = [];
+    try {
+        creations = await fetchPublishedCreations();
+    } catch (error) {
+        console.error("Erreur univers :", error);
+        return;
+    }
+
+    // Compte les créations par univers : { dev: 4, jeu: 1, ... }
+    const counts = {};
+    creations.forEach((c) => {
+        counts[c.universe] = (counts[c.universe] || 0) + 1;
+    });
+
+    container.innerHTML = "";
+
+    // On suit l'ordre de UNIVERSES, et on garde seulement ceux qui ont des créations
+    Object.entries(UNIVERSES)
+        .filter(([key]) => counts[key])
+        .forEach(([key, universe]) => {
+            const total = counts[key];
+
+            const tile = document.createElement("a");
+            tile.href = `index.php?p=project&u=${key}`;
+            tile.className =
+                "flex flex-col gap-4 rounded-[1.6rem] border bg-[#11141c] p-6 transition duration-300 hover:-translate-y-1";
+            tile.style.borderColor = `${universe.color}26`;
+
+            tile.innerHTML = `
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl"
+                    style="background:${universe.color}1a; color:${universe.color}">
+                    <i class="${universe.icon} text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-lg font-semibold text-white">${esc(universe.label)}</p>
+                    <p class="mt-1 text-sm text-gray-500">${total} création${total > 1 ? "s" : ""}</p>
+                </div>
+            `;
+
+            // La bordure s'allume à la couleur de l'univers au survol
+            tile.addEventListener(
+                "mouseenter",
+                () => (tile.style.borderColor = `${universe.color}80`),
+            );
+            tile.addEventListener(
+                "mouseleave",
+                () => (tile.style.borderColor = `${universe.color}26`),
+            );
+
+            container.appendChild(tile);
+        });
 }
 
 /////////// page contact //////////
