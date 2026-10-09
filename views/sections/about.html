@@ -3,11 +3,43 @@
 // Carte "En résumé" : modifie une ligne ici pour la mettre à jour
 // ==========================================================
 $summary = [
-    'Nom'         =>
-'Loïc Lepreux', 'Orientation' => 'Profil polyvalent : développement,
-administratif, création', 'Forces' => 'Rigueur, adaptabilité, curiosité,
-persévérance', 'Outils' => 'React, TypeScript, PHP, SQL · Word, Excel,
-PowerPoint', ]; ?>
+    'Nom'         => 'Loïc Lepreux',
+    'Orientation' => 'Profil polyvalent : développement, administratif, création',
+    'Forces'      => 'Rigueur, adaptabilité, curiosité, persévérance',
+    'Outils'      => 'React, TypeScript, PHP, SQL · Word, Excel, PowerPoint',
+];
+
+// ==========================================================
+// Section "Ce qui m'anime" : un bloc par passion
+// (icônes et couleurs identiques aux univers de script.js)
+// ==========================================================
+$passions = [
+    [
+        'title' => 'Écrire',
+        'icon'  => 'fa-solid fa-feather-pointed',
+        'color' => '#c084fc',
+        'text'  => "Depuis août 2026, j'écris mon premier roman : <em>Les Chroniques de Lorian</em>, une saga de dark fantasy. Passionné par cet univers sombre et épique, j'y raconte le parcours d'un enfant incompris qui, malgré ses erreurs, finit par trouver sa voie. Une histoire qui me tient à cœur, et dans laquelle je mets une part de moi.",
+        'link'  => 'index.php?p=project&u=ecriture',
+        'cta'   => 'Découvrir Les Chroniques de Lorian',
+    ],
+    [
+        'title' => 'Créer des jeux',
+        'icon'  => 'fa-solid fa-hammer',
+        'color' => '#fb923c',
+        'text'  => "<em>RELIC FORGE</em> est né d'une envie simple : réunir mes deux passions, le développement et le jeu vidéo. C'est aussi un vrai défi, celui de concevoir un jeu complet de A à Z. Univers, mécaniques, équilibrage, architecture technique : tout est réfléchi dans une bible de game design de près de 600 pages, avec l'objectif d'une sortie sur Steam.",
+        'link'  => 'index.php?p=project&u=jeu',
+        'cta'   => 'Découvrir RELIC FORGE',
+    ],
+    [
+        'title' => 'Jouer',
+        'icon'  => 'fa-brands fa-twitch',
+        'color' => '#a78bfa',
+        'text'  => "Le jeu vidéo m'accompagne depuis toujours : <em>Call of Duty</em>, <em>Diablo</em>, <em>Final Fantasy</em>, <em>Resident Evil</em>… C'est d'ailleurs lui qui a inspiré plusieurs de mes projets, de la communauté Team HAKAI à mon quiz Resident Evil. Bientôt sur Twitch, pour partager mes parties, rencontrer d'autres joueurs et montrer les coulisses de RELIC FORGE.",
+        'link'  => 'index.php?p=project&u=gaming',
+        'cta'   => 'Voir mes créations gaming',
+    ],
+];
+?>
 
 <main
     class="min-h-screen bg-[#090b10] px-8 py-16 pr-32 text-white md:px-16 md:pr-40"
@@ -83,6 +115,37 @@ PowerPoint', ]; ?>
                     <?php endforeach; ?>
                 </div>
             </div>
+        </div>
+    </section>
+
+        <!-- ========== CE QUI M'ANIME ========== -->
+    <section class="mb-24">
+        <p class="mb-3 text-sm uppercase tracking-[0.35em] text-cyan-400">Passions</p>
+        <h2 class="mb-10 text-3xl font-bold text-white md:text-4xl">Ce qui m'anime</h2>
+
+        <div class="grid gap-6 lg:grid-cols-3">
+            <?php foreach ($passions as $passion): ?>
+                <?php $c = $passion['color']; ?>
+                <article class="flex flex-col rounded-[1.8rem] border bg-[#11141c] p-8 transition duration-300 hover:-translate-y-1"
+                    style="border-color: <?= $c ?>26">
+
+                    <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl"
+                        style="background: <?= $c ?>1a; color: <?= $c ?>">
+                        <i class="<?= $passion['icon'] ?> text-xl"></i>
+                    </div>
+
+                    <h3 class="mb-4 text-xl font-semibold text-white"><?= $passion['title'] ?></h3>
+
+                    <p class="mb-6 flex-1 leading-8 text-gray-400"><?= $passion['text'] ?></p>
+
+                    <a href="<?= $passion['link'] ?>"
+                        class="inline-flex items-center gap-2 text-sm font-medium transition hover:gap-3"
+                        style="color: <?= $c ?>">
+                        <?= $passion['cta'] ?>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </article>
+            <?php endforeach; ?>
         </div>
     </section>
 
