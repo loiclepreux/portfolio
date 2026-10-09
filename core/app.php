@@ -41,6 +41,7 @@ class app
         self::$rooter->addRoute("project", "monApp\controllers\pages\pageProjectController@index");
         self::$rooter->addRoute("contact", "monApp\controllers\pages\pageContactController@index");
         self::$rooter->addRoute("creation", "monApp\controllers\pages\pageCreationController@index");
+        self::$rooter->addRoute("cv", "monApp\controllers\pages\pageCvController@index");
 
         $p = tools::get("p");
 
