@@ -1,3 +1,6 @@
+// Les créations chargées dans l'admin (pour pouvoir les modifier)
+let adminProjects = [];
+
 document.addEventListener("DOMContentLoaded", () => {
     initAdminTabs();
     loadAdminProfile();
@@ -112,6 +115,7 @@ async function loadAdminProjects() {
     try {
         const response = await fetch("../api/get_project_admin.php");
         const projects = await response.json();
+        adminProjects = Array.isArray(projects) ? projects : [];
 
         if (projects.error) {
             container.innerHTML = `<p class="text-red-400">${projects.message}</p>`;
@@ -143,6 +147,15 @@ async function loadAdminProjects() {
                     </div>
 
                     <div class="flex gap-3">
+
+                        <button
+                            type="button"
+                            class="edit-project-btn rounded-xl border border-cyan-500/20 px-4 py-2 text-sm text-cyan-300 transition hover:bg-cyan-500/10"
+                            data-id="${project.id}"
+                        >
+                            Modifier
+                        </button>
+
                         <button
                             type="button"
                             class="delete-project-btn rounded-xl border border-red-500/20 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10"
@@ -158,6 +171,7 @@ async function loadAdminProjects() {
         });
 
         initDeleteProjectButtons();
+        initEditProjectButtons();
     } catch (error) {
         console.error("Erreur chargement projets admin :", error);
         container.innerHTML = `<p class="text-red-400">Erreur lors du chargement.</p>`;
@@ -176,7 +190,12 @@ function initProjectForm() {
         const data = Object.fromEntries(new FormData(form));
 
         try {
-            const response = await fetch("../api/create_project.php", {
+            const isEdit = Boolean(data.id);
+            const url = isEdit
+                ? "../api/update_project.php"
+                : "../api/create_project.php";
+
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -193,9 +212,11 @@ function initProjectForm() {
             );
 
             if (result.success) {
-                message.textContent = "Projet ajouté avec succès.";
+                message.textContent = isEdit
+                    ? "Modifications enregistrées."
+                    : "Création ajoutée avec succès.";
                 message.classList.add("text-green-400");
-                form.reset();
+                resetProjectForm();
                 loadAdminProjects();
             } else {
                 message.textContent =
@@ -209,6 +230,10 @@ function initProjectForm() {
             message.classList.add("text-red-400");
         }
     });
+
+    document
+        .getElementById("projectCancelBtn")
+        ?.addEventListener("click", resetProjectForm);
 }
 
 function initDeleteProjectButtons() {
@@ -387,4 +412,61 @@ function initSkillForm() {
             message.classList.add("text-red-400");
         }
     });
+}
+
+// Les champs du formulaire qu'on remplit en mode modification
+const PROJECT_FIELDS = [
+    "id",
+    "title",
+    "universe",
+    "status",
+    "description",
+    "content",
+    "stack",
+    "image_path",
+    "live_url",
+    "github_url",
+    "is_published",
+    "sort_order",
+];
+
+function initEditProjectButtons() {
+    document.querySelectorAll(".edit-project-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+            const project = adminProjects.find(
+                (p) => String(p.id) === button.dataset.id,
+            );
+            if (project) startEditProject(project);
+        });
+    });
+}
+
+// Passe le formulaire en mode "modification"
+function startEditProject(project) {
+    const form = document.getElementById("adminProjectForm");
+
+    PROJECT_FIELDS.forEach((name) => {
+        if (form.elements[name]) {
+            form.elements[name].value = project[name] ?? "";
+        }
+    });
+
+    document.getElementById("projectSubmitBtn").textContent =
+        "Enregistrer les modifications";
+    document.getElementById("projectCancelBtn").classList.remove("hidden");
+
+    // Remonte jusqu'au formulaire
+    form.scrollIntoView({ behavior: "smooth" });
+}
+
+// Revient au mode "création"
+function resetProjectForm() {
+    const form = document.getElementById("adminProjectForm");
+
+    form.reset();
+    form.elements.id.value = "";
+
+    document.getElementById("projectSubmitBtn").textContent =
+        "Ajouter la création";
+    document.getElementById("projectCancelBtn").classList.add("hidden");
 }

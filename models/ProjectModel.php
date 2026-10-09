@@ -71,6 +71,40 @@ class ProjectModel
         ]);
     }
 
+    public function updateProject(int $id, array $data): void
+    {
+        $stmt = $this->db->prepare("
+            UPDATE projects SET
+                title        = :title,
+                description  = :description,
+                content      = :content,
+                universe     = :universe,
+                status       = :status,
+                stack        = :stack,
+                live_url     = :live_url,
+                github_url   = :github_url,
+                image_path   = :image_path,
+                is_published = :is_published,
+                sort_order   = :sort_order
+            WHERE id = :id
+        ");
+
+        $stmt->execute([
+            'id'           => $id,
+            'title'        => $data['title'] ?? '',
+            'description'  => $data['description'] ?? '',
+            'content'      => $data['content'] ?? null,
+            'universe'     => $data['universe'] ?? 'dev',
+            'status'       => $data['status'] ?? 'termine',
+            'stack'        => $data['stack'] ?? '',
+            'live_url'     => ($data['live_url'] ?? '') !== '' ? $data['live_url'] : null,
+            'github_url'   => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
+            'image_path'   => $data['image_path'] ?? '',
+            'is_published' => $data['is_published'] ?? 1,
+            'sort_order'   => $data['sort_order'] ?? 0,
+        ]);
+    }
+
     public function deleteProject(int $id): void
     {
         $stmt = $this->db->prepare("

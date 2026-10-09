@@ -179,6 +179,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             </h2>
 
             <form id="adminProjectForm" class="grid gap-6 md:grid-cols-2">
+                <input type="hidden" name="id" />
                 <div>
                     <label class="mb-2 block text-sm text-gray-300">Titre</label>
                     <input
@@ -272,13 +273,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                         placeholder="1" />
                 </div>
 
-                <div class="md:col-span-2">
-                    <button
-                        type="submit"
+                <div class="md:col-span-2 flex flex-wrap items-center gap-3">
+                    <button type="submit" id="projectSubmitBtn"
                         class="rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black transition hover:bg-cyan-300">
                         Ajouter la création
                     </button>
-                    <p id="adminProjectMessage" class="mt-4 hidden text-sm"></p>
+
+                    <button type="button" id="projectCancelBtn"
+                        class="hidden rounded-2xl border border-white/15 px-6 py-3 text-gray-300 transition hover:bg-white/5">
+                        Annuler
+                    </button>
+
+                    <p id="adminProjectMessage" class="hidden w-full text-sm"></p>
                 </div>
             </form>
 
