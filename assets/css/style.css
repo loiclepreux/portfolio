@@ -334,6 +334,9 @@
   .mt-\[7px\] {
     margin-top: 7px;
   }
+  .mt-\[9px\] {
+    margin-top: 9px;
+  }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
   }
@@ -1068,6 +1071,10 @@
     --tw-tracking: 0.45em;
     letter-spacing: 0.45em;
   }
+  .tracking-wide {
+    --tw-tracking: var(--tracking-wide);
+    letter-spacing: var(--tracking-wide);
+  }
   .tracking-widest {
     --tw-tracking: var(--tracking-widest);
     letter-spacing: var(--tracking-widest);
@@ -1387,6 +1394,11 @@
   .md\:px-16 {
     @media (width >= 48rem) {
       padding-inline: calc(var(--spacing) * 16);
+    }
+  }
+  .md\:pr-6 {
+    @media (width >= 48rem) {
+      padding-right: calc(var(--spacing) * 6);
     }
   }
   .md\:pr-14 {
