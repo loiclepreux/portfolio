@@ -27,7 +27,7 @@ class ProjectModel
     public function getAllProjects(): array
     {
         $stmt = $this->db->query("
-            SELECT id, title, description, type, stack, live_url, image_path, is_published, sort_order, created_at
+            SELECT id, title, description, content, type, universe, status, stack, live_url, image_path, is_published, sort_order, created_at
             FROM projects
             ORDER BY type ASC, sort_order ASC
         ");
@@ -38,7 +38,7 @@ class ProjectModel
     public function getAllProjectsAdmin(): array
     {
         $stmt = $this->db->query("
-        SELECT id, title, description, type, stack, live_url, image_path, is_published, sort_order, created_at
+        SELECT id, title, description, content, type, universe, status, stack, live_url, image_path, is_published, sort_order, created_at
         FROM projects
         ORDER BY type ASC, sort_order ASC
     ");
@@ -50,9 +50,9 @@ class ProjectModel
     {
         $stmt = $this->db->prepare("
         INSERT INTO projects
-        (title, description, type, stack, live_url, image_path, is_published, sort_order, created_at)
+        (title, description, content, type, universe, status, stack, live_url, image_path, is_published, sort_order, created_at)
         VALUES
-        (:title, :description, :type, :stack, :live_url, :image_path, :is_published, :sort_order, NOW())
+        (:title, :description, :content, :type, :universe, :status, :stack, :live_url, :image_path, :is_published, :sort_order, NOW())
     ");
 
         $stmt->execute([
@@ -64,6 +64,9 @@ class ProjectModel
             'image_path' => $data['image_path'] ?? '',
             'is_published' => $data['is_published'] ?? 1,
             'sort_order' => $data['sort_order'] ?? 0,
+            'content' => $data['content'] ?? null,
+            'universe' => $data['universe'] ?? 'dev',
+            'status' => $data['status'] ?? 'termine',
         ]);
     }
 
