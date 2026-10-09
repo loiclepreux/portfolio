@@ -32,56 +32,102 @@
                 <h2 class="text-2xl font-semibold text-white">Écris-moi</h2>
             </div>
 
-            <form id="contactForm" class="space-y-6">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Ton nom"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
-                />
+            <form id="contactForm" class="space-y-6" novalidate>
+                <div>
+                    <label
+                        for="contactName"
+                        class="mb-2 block text-sm text-gray-300"
+                        >Nom</label
+                    >
+                    <input
+                        id="contactName"
+                        type="text"
+                        name="name"
+                        placeholder="Ton nom"
+                        autocomplete="name"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
+                    />
+                </div>
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Ton email"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
-                />
+                <div>
+                    <label
+                        for="contactEmail"
+                        class="mb-2 block text-sm text-gray-300"
+                        >Email</label
+                    >
+                    <input
+                        id="contactEmail"
+                        type="email"
+                        name="email"
+                        placeholder="ton@email.fr"
+                        autocomplete="email"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
+                    />
+                </div>
 
-                <!-- Motif du message : sert d'objet au mail que tu reçois -->
-                <select
-                    name="subject"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
-                >
-                    <option value="" disabled selected>
-                        Tu me contactes pour…
-                    </option>
-                    <option value="Opportunité professionnelle">
-                        Une opportunité professionnelle
-                    </option>
-                    <option value="Projet / collaboration">
-                        Un projet ou une collaboration
-                    </option>
-                    <option value="RELIC FORGE">RELIC FORGE</option>
-                    <option value="Les Chroniques de Lorian">
-                        Les Chroniques de Lorian
-                    </option>
-                    <option value="Gaming / Twitch">Gaming / Twitch</option>
-                    <option value="Autre">Autre chose</option>
-                </select>
+                <div>
+                    <label
+                        for="contactSubject"
+                        class="mb-2 block text-sm text-gray-300"
+                        >Tu me contactes pour…</label
+                    >
+                    <select
+                        id="contactSubject"
+                        name="subject"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
+                    >
+                        <option value="" disabled selected>
+                            Choisis un motif
+                        </option>
+                        <option value="Opportunité professionnelle">
+                            Une opportunité professionnelle
+                        </option>
+                        <option value="Projet / collaboration">
+                            Un projet ou une collaboration
+                        </option>
+                        <option value="RELIC FORGE">RELIC FORGE</option>
+                        <option value="Les Chroniques de Lorian">
+                            Les Chroniques de Lorian
+                        </option>
+                        <option value="Gaming / Twitch">Gaming / Twitch</option>
+                        <option value="Autre">Autre chose</option>
+                    </select>
+                </div>
 
-                <textarea
-                    rows="6"
-                    name="message"
-                    placeholder="Ton message"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
-                ></textarea>
+                <div>
+                    <label
+                        for="contactText"
+                        class="mb-2 block text-sm text-gray-300"
+                        >Message</label
+                    >
+                    <textarea
+                        id="contactText"
+                        rows="6"
+                        name="message"
+                        placeholder="Ton message"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
+                    ></textarea>
+                </div>
+
+                <!-- Pot de miel anti-spam : invisible pour les humains, rempli par les robots -->
+                <div class="hidden" aria-hidden="true">
+                    <label for="contactWebsite">Site web</label>
+                    <input
+                        id="contactWebsite"
+                        type="text"
+                        name="website"
+                        tabindex="-1"
+                        autocomplete="off"
+                    />
+                </div>
 
                 <button
+                    id="contactSubmit"
                     type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black transition hover:bg-cyan-300"
+                    class="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     <i class="fa-solid fa-paper-plane"></i>
-                    Envoyer
+                    <span>Envoyer</span>
                 </button>
 
                 <p id="contactMessage" class="hidden text-sm"></p>

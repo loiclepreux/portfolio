@@ -745,9 +745,23 @@ async function loadUniverseTiles() {
 function initContactPage() {
     const contactForm = document.getElementById("contactForm");
     const contactMessage = document.getElementById("contactMessage");
+    const submitButton = document.getElementById("contactSubmit");
 
-    if (!contactForm || !contactMessage) {
-        return;
+    if (!contactForm || !contactMessage || !submitButton) return;
+
+    const buttonLabel = submitButton.querySelector("span");
+
+    // Affiche un message sous le formulaire (vert si ok, rouge si erreur)
+    function showMessage(text, isError) {
+        contactMessage.textContent = text;
+        contactMessage.classList.remove(
+            "hidden",
+            "text-cyan-300",
+            "text-red-400",
+        );
+        contactMessage.classList.add(
+            isError ? "text-red-400" : "text-cyan-300",
+        );
     }
 
     contactForm.addEventListener("submit", async (event) => {
@@ -759,39 +773,47 @@ function initContactPage() {
         const subject = formData.get("subject")?.toString().trim();
         const message = formData.get("message")?.toString().trim();
 
-        // 🔹 Vérification
         if (!name || !email || !subject || !message) {
-            contactMessage.textContent = "Merci de remplir tous les champs.";
-            contactMessage.classList.remove("hidden", "text-cyan-300");
-            contactMessage.classList.add("text-red-400");
+            showMessage("Merci de remplir tous les champs.", true);
             return;
         }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showMessage("Cette adresse email ne semble pas valide.", true);
+            return;
+        }
+
+        // Bouton bloqué pendant l'envoi : impossible d'envoyer deux fois
+        submitButton.disabled = true;
+        buttonLabel.textContent = "Envoi en cours…";
 
         try {
             const response = await fetch("api/contact.php", {
                 method: "POST",
                 body: formData,
             });
-
             const result = await response.json();
 
             if (result.success) {
-                contactMessage.textContent = "Message envoyé avec succès ✅";
-                contactMessage.classList.remove("hidden", "text-red-400");
-                contactMessage.classList.add("text-cyan-300");
-
+                showMessage(
+                    "Message envoyé, merci ! Je te réponds rapidement.",
+                    false,
+                );
                 contactForm.reset();
             } else {
-                contactMessage.textContent =
-                    result.message || "Erreur lors de l'envoi ❌";
-                contactMessage.classList.remove("hidden", "text-cyan-300");
-                contactMessage.classList.add("text-red-400");
+                showMessage(
+                    result.message ||
+                        "L'envoi a échoué, réessaie dans un instant.",
+                    true,
+                );
             }
         } catch (error) {
             console.error(error);
-            contactMessage.textContent = "Erreur serveur ❌";
-            contactMessage.classList.remove("hidden", "text-cyan-300");
-            contactMessage.classList.add("text-red-400");
+            showMessage("Erreur de connexion, réessaie dans un instant.", true);
+        } finally {
+            // Exécuté dans tous les cas, succès comme erreur
+            submitButton.disabled = false;
+            buttonLabel.textContent = "Envoyer";
         }
     });
 }

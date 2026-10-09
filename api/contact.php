@@ -6,6 +6,13 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+// 🔹 Pot de miel : un humain ne voit pas ce champ, seul un robot le remplit
+if (!empty($_POST['website'])) {
+    // On fait croire que tout s'est bien passé, sans rien envoyer
+    echo json_encode(["success" => true]);
+    exit;
+}
+
 // 🔹 Récupération des données
 $name = trim($_POST["name"] ?? '');
 $email = trim($_POST["email"] ?? '');
