@@ -306,118 +306,165 @@ async function loadSkills() {
     }
 }
 
-//////////// pages project //////////////
+//////////// créations //////////////
+
+// Les univers du portfolio : pour en créer un nouveau, ajoute une ligne ici
+const UNIVERSES = {
+    dev: { label: "Développement", icon: "fa-solid fa-code", color: "#22d3ee" },
+    jeu: {
+        label: "Création de jeu",
+        icon: "fa-solid fa-hammer",
+        color: "#fb923c",
+    },
+    ecriture: {
+        label: "Écriture",
+        icon: "fa-solid fa-feather-pointed",
+        color: "#c084fc",
+    },
+    gaming: {
+        label: "Gaming & live",
+        icon: "fa-brands fa-twitch",
+        color: "#a78bfa",
+    },
+    autre: {
+        label: "Autres créations",
+        icon: "fa-solid fa-screwdriver-wrench",
+        color: "#4ade80",
+    },
+};
+
+const STATUSES = {
+    termine: { label: "Terminé", color: "#4ade80" },
+    en_cours: { label: "En cours", color: "#facc15" },
+    idee: { label: "À venir", color: "#94a3b8" },
+};
+
+function getUniverse(key) {
+    return UNIVERSES[key] || UNIVERSES.autre;
+}
+
+function getStatus(key) {
+    return STATUSES[key] || STATUSES.termine;
+}
+
+// Sécurité : empêche un texte de la base d'être interprété comme du HTML
+function esc(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
+// Récupère les créations publiées, triées par ordre
+async function fetchPublishedCreations() {
+    const response = await fetch("api/project.php");
+    const projects = await response.json();
+
+    if (!Array.isArray(projects)) {
+        throw new Error("Réponse inattendue de l'API");
+    }
+
+    return projects
+        .filter((p) => Number(p.is_published) === 1)
+        .sort((a, b) => Number(a.sort_order) - Number(b.sort_order));
+}
+
+// Petite pastille colorée (univers ou statut)
+function badge(label, color) {
+    return `
+        <span class="rounded-full border px-3 py-1 text-xs uppercase tracking-[0.15em]"
+            style="color:${color}; border-color:${color}55; background:${color}14;">
+            ${esc(label)}
+        </span>`;
+}
+
+// L'image de la carte, ou un visuel généré si la création n'a pas d'image
+function creationVisual(project) {
+    const universe = getUniverse(project.universe);
+
+    if (project.image_path) {
+        return `
+            <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
+                class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />`;
+    }
+
+    return `
+        <div class="flex h-full w-full items-center justify-center"
+            style="background: radial-gradient(circle at 30% 20%, ${universe.color}33, transparent 60%), #0b0d12;">
+            <i class="${universe.icon} text-5xl" style="color:${universe.color}"></i>
+        </div>`;
+}
+
+// Fabrique une carte de création
+function creationCard(project) {
+    const universe = getUniverse(project.universe);
+    const status = getStatus(project.status);
+
+    const article = document.createElement("article");
+    article.className =
+        "group relative overflow-hidden rounded-[1.8rem] border border-white/5 bg-[#11141c] transition duration-300 hover:-translate-y-1";
+
+    article.innerHTML = `
+        <div class="relative h-40 w-full overflow-hidden">
+            ${creationVisual(project)}
+            <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
+        </div>
+
+        <div class="p-7">
+            <div class="mb-4 flex flex-wrap gap-2">
+                ${badge(universe.label, universe.color)}
+                ${badge(status.label, status.color)}
+            </div>
+
+            <h3 class="text-xl font-semibold text-white">${esc(project.title)}</h3>
+
+            ${project.stack ? `<p class="mt-2 text-sm" style="color:${universe.color}">${esc(project.stack)}</p>` : ""}
+
+            <p class="mt-4 text-sm leading-7 text-gray-400">${esc(project.description)}</p>
+        </div>
+    `;
+
+    // La bordure prend la couleur de l'univers au survol
+    article.addEventListener("mouseenter", () => {
+        article.style.borderColor = `${universe.color}55`;
+        article.style.boxShadow = `0 0 28px ${universe.color}22`;
+    });
+    article.addEventListener("mouseleave", () => {
+        article.style.borderColor = "";
+        article.style.boxShadow = "";
+    });
+
+    return article;
+}
 
 async function loadProjects() {
-    const personalContainer = document.getElementById(
-        "personalProjectsContainer",
-    );
-    const professionalContainer = document.getElementById(
-        "professionalProjectsContainer",
-    );
+    const doneContainer = document.getElementById("doneCreationsContainer");
+    const nextContainer = document.getElementById("nextCreationsContainer");
 
-    if (!personalContainer || !professionalContainer) return;
+    // On n'est pas sur la page Créations : on ne fait rien
+    if (!doneContainer || !nextContainer) return;
 
     try {
-        const response = await fetch("api/project.php");
-        const projects = await response.json();
+        const creations = await fetchPublishedCreations();
 
-        console.log("projects =", projects);
+        const done = creations.filter((c) => c.status === "termine");
+        const next = creations.filter((c) => c.status !== "termine");
 
-        personalContainer.innerHTML = "";
-        professionalContainer.innerHTML = "";
+        doneContainer.innerHTML = "";
+        nextContainer.innerHTML = "";
 
-        const publishedProjects = projects
-            .filter((project) => Number(project.is_published) === 1)
-            .sort((a, b) => a.sort_order - b.sort_order);
+        done.forEach((c) => doneContainer.appendChild(creationCard(c)));
+        next.forEach((c) => nextContainer.appendChild(creationCard(c)));
 
-        publishedProjects.forEach((project) => {
-            const article = document.createElement("article");
-
-            article.className =
-                "group relative overflow-hidden rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] shadow-[0_0_20px_rgba(0,255,255,0.03)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:shadow-[0_0_28px_rgba(0,255,255,0.07)]";
-
-            article.innerHTML = `
-                <div class="relative h-40 w-full overflow-hidden">
-                    <img
-                        src="${project.image_path}"
-                        alt="${project.title}"
-                        class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    />
-
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/30 to-transparent opacity-80 transition duration-300 group-hover:opacity-100"></div>
-
-                    <div class="absolute inset-0 flex items-end justify-between p-4">
-                        <p class="translate-y-2 text-sm font-medium tracking-[0.2em] text-cyan-300 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                            VOIR LE PROJET
-                        </p>
-
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-black/30 text-cyan-300 opacity-0 transition duration-300 group-hover:opacity-100">
-                            ↗
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-7">
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold text-white">
-                            ${project.title}
-                        </h3>
-
-                        <p class="mt-2 text-sm tracking-wide text-cyan-400">
-                            ${project.stack}
-                        </p>
-                    </div>
-
-                    <p class="mb-6 text-sm leading-7 text-gray-400">
-                        ${project.description}
-                    </p>
-
-                    <div class="mb-6 flex flex-wrap gap-2">
-                        <span class="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-cyan-300">
-                            ${project.type}
-                        </span>
-                    </div>
-
-                    <div class="flex gap-3">
-                        ${
-                            project.live_url
-                                ? `<a href="${project.live_url}" target="_blank" class="rounded-xl bg-cyan-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-cyan-300">
-                                        Voir le projet
-                                    </a>`
-                                : ""
-                        }
-                    </div>
-                </div>
-            `;
-
-            if (project.type === "professional") {
-                professionalContainer.appendChild(article);
-            } else {
-                personalContainer.appendChild(article);
-            }
-        });
-
-        if (!personalContainer.innerHTML.trim()) {
-            personalContainer.innerHTML = `
-                <p class="text-gray-400">Aucun projet personnel publié pour le moment.</p>
-            `;
-        }
-
-        if (!professionalContainer.innerHTML.trim()) {
-            professionalContainer.innerHTML = `
-                <p class="text-gray-400">Aucun projet professionnel publié pour le moment.</p>
-            `;
-        }
+        if (!done.length)
+            doneContainer.innerHTML = `<p class="text-gray-500">Rien de terminé pour l'instant.</p>`;
+        if (!next.length)
+            nextContainer.innerHTML = `<p class="text-gray-500">Rien en préparation pour l'instant.</p>`;
     } catch (error) {
-        console.error("Erreur projets :", error);
-
-        personalContainer.innerHTML = `
-            <p class="text-red-400">Erreur lors du chargement des projets.</p>
-        `;
-        professionalContainer.innerHTML = `
-            <p class="text-red-400">Erreur lors du chargement des projets.</p>
-        `;
+        console.error("Erreur créations :", error);
+        doneContainer.innerHTML = `<p class="text-red-400">Erreur lors du chargement des créations.</p>`;
     }
 }
 
