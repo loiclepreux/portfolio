@@ -1,9 +1,9 @@
 <main
-    class="min-h-screen bg-[#090b10] px-8 py-20 pr-32 text-white md:px-16 md:pr-40"
+    class="min-h-screen bg-[#090b10] px-8 py-16 pr-32 text-white md:px-16 md:pr-40"
 >
-    <!-- HEADER -->
+    <!-- ========== EN-TÊTE ========== -->
     <section class="mb-16">
-        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-cyan-400">
+        <p class="mb-3 text-sm uppercase tracking-[0.35em] text-cyan-400">
             Contact
         </p>
 
@@ -12,167 +12,249 @@
         </h1>
 
         <p class="max-w-3xl text-base leading-8 text-gray-400">
-            Tu peux me contacter pour échanger autour de mon parcours, de mes
-            projets, d’une opportunité, ou simplement pour discuter
-            développement web et conception d’applications.
+            Une opportunité, une idée de collaboration, une question sur mon
+            roman ou sur RELIC FORGE, ou simplement l'envie d'échanger :
+            écris-moi, je réponds à chaque message.
         </p>
     </section>
 
     <div class="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
-        <!-- FORMULAIRE -->
+        <!-- ========== FORMULAIRE ========== -->
         <section
-            class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+            class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8"
         >
             <div class="mb-8 flex items-center gap-3">
                 <div
                     class="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
                 >
-                    <span class="text-xl">💬</span>
+                    <i class="fa-solid fa-comment-dots text-lg"></i>
                 </div>
-
-                <h2 class="text-2xl font-semibold text-white">
-                    Formulaire de contact
-                </h2>
+                <h2 class="text-2xl font-semibold text-white">Écris-moi</h2>
             </div>
 
             <form id="contactForm" class="space-y-6">
                 <input
                     type="text"
                     name="name"
-                    placeholder="Votre nom"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                    placeholder="Ton nom"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
                 />
 
                 <input
                     type="email"
                     name="email"
-                    placeholder="Votre email"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                    placeholder="Ton email"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
                 />
 
-                <input
-                    type="text"
+                <!-- Motif du message : sert d'objet au mail que tu reçois -->
+                <select
                     name="subject"
-                    placeholder="Sujet"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
-                />
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
+                >
+                    <option value="" disabled selected>
+                        Tu me contactes pour…
+                    </option>
+                    <option value="Opportunité professionnelle">
+                        Une opportunité professionnelle
+                    </option>
+                    <option value="Projet / collaboration">
+                        Un projet ou une collaboration
+                    </option>
+                    <option value="RELIC FORGE">RELIC FORGE</option>
+                    <option value="Les Chroniques de Lorian">
+                        Les Chroniques de Lorian
+                    </option>
+                    <option value="Gaming / Twitch">Gaming / Twitch</option>
+                    <option value="Autre">Autre chose</option>
+                </select>
 
                 <textarea
                     rows="6"
                     name="message"
-                    placeholder="Votre message"
-                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white focus:border-cyan-400"
+                    placeholder="Ton message"
+                    class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white outline-none focus:border-cyan-400"
                 ></textarea>
 
                 <button
                     type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black hover:bg-cyan-300"
+                    class="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black transition hover:bg-cyan-300"
                 >
-                    ✉ Envoyer
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Envoyer
                 </button>
 
-                <p id="contactMessage" class="hidden text-sm text-cyan-300"></p>
+                <p id="contactMessage" class="hidden text-sm"></p>
             </form>
         </section>
 
-        <!-- INFOS -->
+        <!-- ========== COLONNE DROITE ========== -->
         <aside class="space-y-6">
-            <!-- INFOS PROFIL -->
+            <!-- Coordonnées (remplies par loadProfile() dans script.js) -->
             <div
-                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8"
             >
                 <h2 class="mb-6 text-2xl font-semibold text-white">
-                    Informations
+                    Me retrouver
                 </h2>
 
-                <div class="space-y-4">
-                    <!-- EMAIL -->
-                    <div
-                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                <div class="space-y-3">
+                    <!-- Email -->
+                    <a
+                        id="profileEmail"
+                        href="#"
+                        class="flex items-center gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-3 transition hover:border-cyan-400/30"
                     >
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300"
                         >
-                            📧
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Email</p>
-                            <a id="profileEmail" href="#" class="text-white">
-                                Chargement...
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- TELEPHONE -->
-                    <div
-                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
-                    >
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
-                        >
-                            📱
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Téléphone</p>
-                            <p id="profilePhone" class="text-white">
-                                Non renseigné
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- LINKEDIN -->
-                    <div
-                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
-                    >
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
-                        >
-                            💼
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">LinkedIn</p>
-                            <a
-                                id="profileLinkedin"
-                                href="#"
-                                target="_blank"
-                                class="text-white"
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <span>
+                            <span
+                                class="block text-xs uppercase tracking-[0.15em] text-gray-500"
+                                >Email</span
                             >
-                                Chargement...
-                            </a>
-                        </div>
-                    </div>
+                            <span data-value class="text-white"
+                                >Chargement...</span
+                            >
+                        </span>
+                    </a>
 
-                    <!-- LOCALISATION -->
-                    <div
-                        class="flex items-start gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-4"
+                    <!-- Téléphone (supprime ce bloc pour ne plus l'afficher) -->
+                    <a
+                        id="profilePhone"
+                        href="#"
+                        class="flex items-center gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-3 transition hover:border-cyan-400/30"
                     >
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300"
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300"
                         >
-                            📍
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Localisation</p>
-                            <p id="profileLocation" class="text-white">
-                                Chargement...
-                            </p>
-                        </div>
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <span>
+                            <span
+                                class="block text-xs uppercase tracking-[0.15em] text-gray-500"
+                                >Téléphone</span
+                            >
+                            <span data-value class="text-white"
+                                >Chargement...</span
+                            >
+                        </span>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a
+                        id="profileLinkedin"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-3 transition hover:border-cyan-400/30"
+                    >
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            <i class="fa-brands fa-linkedin"></i>
+                        </span>
+                        <span>
+                            <span
+                                class="block text-xs uppercase tracking-[0.15em] text-gray-500"
+                                >LinkedIn</span
+                            >
+                            <span data-value class="text-white"
+                                >Chargement...</span
+                            >
+                        </span>
+                    </a>
+
+                    <!-- GitHub -->
+                    <a
+                        href="https://github.com/loiclepreux"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-3 transition hover:border-cyan-400/30"
+                    >
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            <i class="fa-brands fa-github"></i>
+                        </span>
+                        <span>
+                            <span
+                                class="block text-xs uppercase tracking-[0.15em] text-gray-500"
+                                >GitHub</span
+                            >
+                            <span class="text-white"
+                                >github.com/loiclepreux</span
+                            >
+                        </span>
+                    </a>
+
+                    <!-- Localisation (pas de lien) -->
+                    <div
+                        id="profileLocation"
+                        class="flex items-center gap-4 rounded-2xl border border-cyan-500/10 bg-white/5 px-4 py-3"
+                    >
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300"
+                        >
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        <span>
+                            <span
+                                class="block text-xs uppercase tracking-[0.15em] text-gray-500"
+                                >Localisation</span
+                            >
+                            <span data-value class="text-white"
+                                >Chargement...</span
+                            >
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- DISPONIBILITE -->
+            <!-- Ouvert à… -->
             <div
-                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]"
+                class="rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8"
             >
-                <h2 class="mb-4 text-2xl font-semibold text-white">
-                    Disponibilité
-                </h2>
+                <h2 class="mb-4 text-2xl font-semibold text-white">Ouvert à</h2>
 
-                <p class="leading-8 text-gray-400">
-                    Je suis disponible pour échanger autour d’une opportunité,
-                    d’un projet ou d’une collaboration.
-                </p>
+                <div class="flex flex-wrap gap-3 text-sm">
+                    <span
+                        class="rounded-full border border-white/10 bg-white/5 px-4 py-2"
+                        style="color: #22d3ee"
+                    >
+                        <i class="fa-solid fa-briefcase mr-2"></i>Un poste en
+                        développement
+                    </span>
+                    <span
+                        class="rounded-full border border-white/10 bg-white/5 px-4 py-2"
+                        style="color: #4ade80"
+                    >
+                        <i class="fa-solid fa-handshake mr-2"></i>Une
+                        collaboration
+                    </span>
+                    <span
+                        class="rounded-full border border-white/10 bg-white/5 px-4 py-2"
+                        style="color: #c084fc"
+                    >
+                        <i class="fa-solid fa-feather-pointed mr-2"></i>Parler
+                        écriture
+                    </span>
+                    <span
+                        class="rounded-full border border-white/10 bg-white/5 px-4 py-2"
+                        style="color: #fb923c"
+                    >
+                        <i class="fa-solid fa-hammer mr-2"></i>Parler game
+                        design
+                    </span>
+                    <span
+                        class="rounded-full border border-white/10 bg-white/5 px-4 py-2"
+                        style="color: #a78bfa"
+                    >
+                        <i class="fa-brands fa-twitch mr-2"></i>Jouer ensemble
+                    </span>
+                </div>
             </div>
         </aside>
     </div>

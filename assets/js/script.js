@@ -183,8 +183,14 @@ async function loadProfile() {
                 : "/" + profile.profile_image;
         }
 
+        // Écrit une valeur dans le <span data-value> d'une carte de contact
+        const setValue = (element, text) => {
+            const target = element?.querySelector("[data-value]") || element;
+            if (target) target.textContent = text;
+        };
+
         if (profileEmail && profile.email) {
-            profileEmail.textContent = profile.email;
+            setValue(profileEmail, profile.email);
             profileEmail.href = `mailto:${profile.email}`;
         }
 
@@ -193,22 +199,28 @@ async function loadProfile() {
                 ? profile.linkedin_url
                 : `https://${profile.linkedin_url}`;
 
-            profileLinkedin.textContent = profile.linkedin_url.replace(
-                /^https?:\/\//,
-                "",
+            setValue(
+                profileLinkedin,
+                profile.linkedin_url.replace(/^https?:\/\//, ""),
             );
             profileLinkedin.href = linkedinUrl;
         }
 
         if (profileLocation) {
-            profileLocation.textContent = profile.location || "Non renseignée";
-        }
-
-        if (profilePhone) {
-            profilePhone.textContent = profile.phone || "Non renseigné";
+            setValue(profileLocation, profile.location || "Non renseignée");
         }
     } catch (error) {
         console.error("Erreur chargement profil :", error);
+    }
+
+    if (profilePhone) {
+        if (profile.phone) {
+            setValue(profilePhone, profile.phone);
+            // tel: sans espaces ni points, et au format international
+            profilePhone.href = `tel:${profile.phone.replace(/[^\d+]/g, "").replace(/^0/, "+33")}`;
+        } else {
+            profilePhone.remove(); // pas de numéro : on retire la carte
+        }
     }
 }
 

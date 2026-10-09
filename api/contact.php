@@ -27,8 +27,22 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || preg_match('/[\r\n]/', $name .
 // 🔹 Ton email (IMPORTANT)
 $to = "lepreux.loic@bbox.fr";
 
-// 🔹 Sujet
-$subject = $subject ?: "Nouveau message portfolio";
+// 🔹 Le motif doit faire partie de la liste du formulaire
+$allowedSubjects = [
+    'Opportunité professionnelle',
+    'Projet / collaboration',
+    'RELIC FORGE',
+    'Les Chroniques de Lorian',
+    'Gaming / Twitch',
+    'Autre',
+];
+
+if (!in_array($subject, $allowedSubjects, true)) {
+    $subject = 'Autre';
+}
+
+// Ex : "[RELIC FORGE] Message de Julien"
+$subject = "[$subject] Message de $name";
 
 // 🔹 Contenu du mail
 $body = "Nom : $name\n";
