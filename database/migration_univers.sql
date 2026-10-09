@@ -7,3 +7,6 @@ AFTER type,
 AFTER universe,
     ADD COLUMN content TEXT NULL
 AFTER description;
+ALTER TABLE projects
+ADD COLUMN github_url VARCHAR(255) NULL
+AFTER live_url;

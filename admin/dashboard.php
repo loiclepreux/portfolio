@@ -124,12 +124,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm text-gray-300">Spécialité</label>
+                    <label class="mb-2 block text-sm text-gray-300">En ce moment</label>
                     <input
                         type="text"
                         name="specialty"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="Développeur Full Stack" />
+                        placeholder="Développeur, auteur, créateur de jeu" />
                 </div>
 
                 <div>
@@ -142,21 +142,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm text-gray-300">Stack</label>
+                    <label class="mb-2 block text-sm text-gray-300">Outils</label>
                     <input
                         type="text"
                         name="stack"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="HTML, CSS, JavaScript, PHP..." />
+                        placeholder="PHP, MySQL… ou Roman • Dark fantasy" />
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm text-gray-300">Objectif</label>
+                    <label class="mb-2 block text-sm text-gray-300">Objectifs</label>
                     <textarea
                         name="objective"
                         rows="4"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="Objectif professionnel"></textarea>
+                        placeholder="Objectif professionnel / personnel"></textarea>
                 </div>
 
                 <div class="md:col-span-2">
@@ -175,7 +175,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             id="tab-projects"
             class="admin-tab-content hidden rounded-[1.8rem] border border-cyan-500/10 bg-[#11141c] p-8 shadow-[0_0_20px_rgba(0,255,255,0.03)]">
             <h2 class="mb-8 text-2xl font-semibold text-white">
-                Gérer les projets
+                Gérer les créations
             </h2>
 
             <form id="adminProjectForm" class="grid gap-6 md:grid-cols-2">
@@ -189,31 +189,41 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm text-gray-300">Type</label>
-                    <select
-                        name="type"
+                    <label class="mb-2 block text-sm text-gray-300">Univers</label>
+                    <select name="universe"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white">
-                        <option value="personal">Personnel</option>
-                        <option value="professional">Professionnel</option>
+                        <option value="dev">Développement</option>
+                        <option value="jeu">Création de jeu</option>
+                        <option value="ecriture">Écriture</option>
+                        <option value="gaming">Gaming &amp; live</option>
+                        <option value="autre">Autres créations</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm text-gray-300">Statut</label>
+                    <select name="status"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white">
+                        <option value="termine">Terminé</option>
+                        <option value="en_cours">En cours</option>
+                        <option value="idee">À venir</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm text-gray-300">Description</label>
-                    <textarea
-                        name="description"
-                        rows="4"
+                    <label class="mb-2 block text-sm text-gray-300">Texte détaillé</label>
+                    <textarea name="content" rows="8"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="Description du projet"></textarea>
+                        placeholder="Description courte (affichée sur la carte)"></textarea>
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm text-gray-300">Stack</label>
+                    <label class="mb-2 block text-sm text-gray-300">Outils</label>
                     <input
                         type="text"
                         name="stack"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="HTML, PHP, CSS, JS" />
+                        placeholder="PHP, MySQL… ou Roman • Dark fantasy" />
                 </div>
 
                 <div>
@@ -226,7 +236,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm text-gray-300">Live URL</label>
+                    <label class="mb-2 block text-sm text-gray-300">Lien (site, Twitch…)</label>
                     <input
                         type="text"
                         name="live_url"
@@ -266,7 +276,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                     <button
                         type="submit"
                         class="rounded-2xl bg-cyan-400 px-6 py-3 font-semibold text-black transition hover:bg-cyan-300">
-                        Ajouter le projet
+                        Ajouter la création
                     </button>
                     <p id="adminProjectMessage" class="mt-4 hidden text-sm"></p>
                 </div>

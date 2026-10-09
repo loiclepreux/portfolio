@@ -584,6 +584,7 @@ async function loadCreationDetail() {
     const universe = getUniverse(creation.universe);
     const status = getStatus(creation.status);
     const link = safeUrl(creation.live_url);
+    const codeLink = safeUrl(creation.github_url);
 
     // Le texte long : une ligne vide = un nouveau paragraphe
     const paragraphs = String(creation.content || "")
@@ -613,16 +614,28 @@ async function loadCreationDetail() {
 
         ${paragraphs ? `<div class="space-y-5 leading-8 text-gray-400">${paragraphs}</div>` : ""}
 
-        ${
-            link
-                ? `
-            <a href="${esc(link)}" target="_blank" rel="noopener noreferrer"
-                class="mt-10 inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold text-black transition hover:opacity-90"
-                style="background:${universe.color}">
-                Voir le projet <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
-            </a>`
-                : ""
-        }
+        <div class="mt-10 flex flex-wrap gap-4">
+            ${
+                link
+                    ? `
+                <a href="${esc(link)}" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold text-black transition hover:opacity-90"
+                    style="background:${universe.color}">
+                    Voir le projet <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                </a>`
+                    : ""
+            }
+
+            ${
+                codeLink
+                    ? `
+                <a href="${esc(codeLink)}" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3 font-medium text-white transition hover:bg-white/10">
+                    <i class="fa-brands fa-github"></i> Voir le code
+                </a>`
+                    : ""
+            }
+        </div>
     `;
 }
 
