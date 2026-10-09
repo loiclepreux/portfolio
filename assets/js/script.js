@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initContactPage();
     loadSkills();
     loadProjects();
+    loadCreationDetail();
     loadProfile();
     initLoginModal();
 });
@@ -407,23 +408,29 @@ function creationCard(project) {
         "group relative overflow-hidden rounded-[1.8rem] border border-white/5 bg-[#11141c] transition duration-300 hover:-translate-y-1";
 
     article.innerHTML = `
-        <div class="relative h-40 w-full overflow-hidden">
-            ${creationVisual(project)}
-            <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
-        </div>
-
-        <div class="p-7">
-            <div class="mb-4 flex flex-wrap gap-2">
-                ${badge(universe.label, universe.color)}
-                ${badge(status.label, status.color)}
+        <a href="index.php?p=creation&id=${encodeURIComponent(project.id)}" class="block">
+            <div class="relative h-40 w-full overflow-hidden">
+                ${creationVisual(project)}
+                <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
             </div>
 
-            <h3 class="text-xl font-semibold text-white">${esc(project.title)}</h3>
+            <div class="p-7">
+                <div class="mb-4 flex flex-wrap gap-2">
+                    ${badge(universe.label, universe.color)}
+                    ${badge(status.label, status.color)}
+                </div>
 
-            ${project.stack ? `<p class="mt-2 text-sm" style="color:${universe.color}">${esc(project.stack)}</p>` : ""}
+                <h3 class="text-xl font-semibold text-white">${esc(project.title)}</h3>
 
-            <p class="mt-4 text-sm leading-7 text-gray-400">${esc(project.description)}</p>
-        </div>
+                ${project.stack ? `<p class="mt-2 text-sm" style="color:${universe.color}">${esc(project.stack)}</p>` : ""}
+
+                <p class="mt-4 text-sm leading-7 text-gray-400">${esc(project.description)}</p>
+
+                <p class="mt-6 inline-flex items-center gap-2 text-sm font-medium" style="color:${universe.color}">
+                    En savoir plus <i class="fa-solid fa-arrow-right text-xs"></i>
+                </p>
+            </div>
+        </a>
     `;
 
     // La bordure prend la couleur de l'univers au survol
@@ -538,6 +545,82 @@ async function loadProjects() {
 
     renderFilters();
     renderCards();
+}
+
+// Sécurité : n'accepte que les liens http(s) ou les chemins du site
+function safeUrl(url) {
+    const value = String(url ?? "").trim();
+    if (/^https?:\/\//i.test(value) || /^[\w./-]+$/.test(value)) return value;
+    return "";
+}
+
+async function loadCreationDetail() {
+    const container = document.getElementById("creationDetail");
+
+    // On n'est pas sur la page détail : on ne fait rien
+    if (!container) return;
+
+    // L'id est dans l'adresse : ?p=creation&id=6
+    const id = new URLSearchParams(window.location.search).get("id");
+
+    let creation;
+    try {
+        const creations = await fetchPublishedCreations();
+        creation = creations.find((c) => String(c.id) === String(id));
+    } catch (error) {
+        console.error("Erreur création :", error);
+        container.innerHTML = `<p class="text-red-400">Erreur lors du chargement.</p>`;
+        return;
+    }
+
+    if (!creation) {
+        container.innerHTML = `<p class="text-gray-400">Cette création n'existe pas ou n'est pas encore publiée.</p>`;
+        return;
+    }
+
+    const universe = getUniverse(creation.universe);
+    const status = getStatus(creation.status);
+    const link = safeUrl(creation.live_url);
+
+    // Le texte long : une ligne vide = un nouveau paragraphe
+    const paragraphs = String(creation.content || "")
+        .split(/\n\s*\n/)
+        .filter((p) => p.trim())
+        .map((p) => `<p>${esc(p.trim()).replaceAll("\n", "<br>")}</p>`)
+        .join("");
+
+    // Le titre de l'onglet du navigateur
+    document.title = `${creation.title} — Loïc Lepreux`;
+
+    container.innerHTML = `
+        <div class="mb-6 flex flex-wrap gap-2">
+            ${badge(universe.label, universe.color)}
+            ${badge(status.label, status.color)}
+        </div>
+
+        <h1 class="mb-4 text-4xl font-bold text-white md:text-5xl">${esc(creation.title)}</h1>
+
+        ${creation.stack ? `<p class="mb-8 text-sm" style="color:${universe.color}">${esc(creation.stack)}</p>` : ""}
+
+        <div class="group mb-10 h-64 overflow-hidden rounded-[1.8rem] border border-white/5 md:h-80">
+            ${creationVisual(creation)}
+        </div>
+
+        <p class="mb-8 text-lg leading-8 text-gray-200">${esc(creation.description)}</p>
+
+        ${paragraphs ? `<div class="space-y-5 leading-8 text-gray-400">${paragraphs}</div>` : ""}
+
+        ${
+            link
+                ? `
+            <a href="${esc(link)}" target="_blank" rel="noopener noreferrer"
+                class="mt-10 inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold text-black transition hover:opacity-90"
+                style="background:${universe.color}">
+                Voir le projet <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+            </a>`
+                : ""
+        }
+    `;
 }
 
 /////////// page contact //////////
