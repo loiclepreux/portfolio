@@ -27,7 +27,7 @@ class ProjectModel
     public function getAllProjects(): array
     {
         $stmt = $this->db->query("
-            SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, is_published, sort_order, created_at
+            SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
             FROM projects
             ORDER BY type ASC, sort_order ASC
         ");
@@ -38,7 +38,7 @@ class ProjectModel
     public function getAllProjectsAdmin(): array
     {
         $stmt = $this->db->query("
-        SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, is_published, sort_order, created_at
+        SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
         FROM projects
         ORDER BY type ASC, sort_order ASC
     ");
@@ -50,7 +50,7 @@ class ProjectModel
     {
         $stmt = $this->db->prepare("
         INSERT INTO projects
-        (title, description, content, type, universe, status, stack, live_url, github_url, image_path, is_published, sort_order, created_at)
+        (title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at)
         VALUES
         (:title, :description, :content, :type, :universe, :status, :stack, :live_url, :github_url, :image_path, :is_published, :sort_order, NOW())
     ");
@@ -84,6 +84,7 @@ class ProjectModel
                 live_url     = :live_url,
                 github_url   = :github_url,
                 image_path   = :image_path,
+                image_position = :image_position
                 is_published = :is_published,
                 sort_order   = :sort_order
             WHERE id = :id
@@ -100,6 +101,7 @@ class ProjectModel
             'live_url'     => ($data['live_url'] ?? '') !== '' ? $data['live_url'] : null,
             'github_url'   => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
             'image_path'   => $data['image_path'] ?? '',
+            'image_position' => ($data['image_position'] ?? '') !== '' ? $data['image_position'] : null,
             'is_published' => $data['is_published'] ?? 1,
             'sort_order'   => $data['sort_order'] ?? 0,
         ]);

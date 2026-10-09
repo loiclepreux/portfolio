@@ -439,21 +439,25 @@ function creationVisual(project, mode = "card") {
                     class="mx-auto block max-h-[70vh] w-auto max-w-full" />`;
         }
 
-        // Image en hauteur (couverture de livre…) : on cadre sur le haut, là où est le titre
+        // Cadrage choisi dans l'admin, sinon automatique (haut pour les images en hauteur)
+        const position = project.image_position
+            ? `style="object-position:${esc(project.image_position)}"`
+            : `onload="if (this.naturalHeight > this.naturalWidth) this.classList.add('object-top')"`;
+
         return `
             <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                onload="if (this.naturalHeight > this.naturalWidth) this.classList.add('object-top')" />`;
-    }
+                ${position} />`;
 
-    // Pas d'image : icône de l'univers sur fond coloré
-    const size = mode === "detail" ? "h-64 md:h-80" : "h-full";
+        // Pas d'image : icône de l'univers sur fond coloré
+        const size = mode === "detail" ? "h-64 md:h-80" : "h-full";
 
-    return `
+        return `
         <div class="flex ${size} w-full items-center justify-center"
             style="background: radial-gradient(circle at 30% 20%, ${universe.color}33, transparent 60%), #0b0d12;">
             <i class="${universe.icon} text-5xl" style="color:${universe.color}"></i>
         </div>`;
+    }
 }
 
 // Fabrique une carte de création

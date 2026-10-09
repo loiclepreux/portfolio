@@ -237,6 +237,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div>
+                    <label class="mb-2 block text-sm text-gray-300">Cadrage de l'image</label>
+                    <input type="text" name="image_position"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
+                        placeholder="Vide = automatique · ex : top, center, 50% 70%" />
+                </div>
+
+                <div>
                     <label class="mb-2 block text-sm text-gray-300">Lien (site, Twitch…)</label>
                     <input
                         type="text"

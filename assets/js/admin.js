@@ -428,6 +428,7 @@ const PROJECT_FIELDS = [
     "github_url",
     "is_published",
     "sort_order",
+    "image_position",
 ];
 
 function initEditProjectButtons() {

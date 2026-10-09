@@ -10,3 +10,10 @@ AFTER description;
 ALTER TABLE projects
 ADD COLUMN github_url VARCHAR(255) NULL
 AFTER live_url;
+ALTER TABLE projects
+ADD COLUMN image_position VARCHAR(20) NULL
+AFTER image_path;
+UPDATE projects
+SET image_path = '/assets/img/relic-forge.jpg',
+    image_position = '50% 72%'
+WHERE title = 'RELIC FORGE';
