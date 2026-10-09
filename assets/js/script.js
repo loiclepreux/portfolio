@@ -442,15 +442,87 @@ function creationCard(project) {
 async function loadProjects() {
     const doneContainer = document.getElementById("doneCreationsContainer");
     const nextContainer = document.getElementById("nextCreationsContainer");
+    const filtersContainer = document.getElementById("universeFilters");
 
     // On n'est pas sur la page Créations : on ne fait rien
-    if (!doneContainer || !nextContainer) return;
+    if (!doneContainer || !nextContainer || !filtersContainer) return;
 
+    let creations;
     try {
-        const creations = await fetchPublishedCreations();
+        creations = await fetchPublishedCreations();
+    } catch (error) {
+        console.error("Erreur créations :", error);
+        doneContainer.innerHTML = `<p class="text-red-400">Erreur lors du chargement des créations.</p>`;
+        return;
+    }
 
-        const done = creations.filter((c) => c.status === "termine");
-        const next = creations.filter((c) => c.status !== "termine");
+    // Les univers qui ont au moins une création
+    const usedUniverses = [...new Set(creations.map((c) => c.universe))];
+
+    // Univers actif : lu dans l'adresse (?u=ecriture), sinon "Tout"
+    let active = new URLSearchParams(window.location.search).get("u");
+    if (!usedUniverses.includes(active)) active = "all";
+
+    // --- Les boutons de filtre ---
+    function renderFilters() {
+        const buttons = [
+            [
+                "all",
+                {
+                    label: "Tout",
+                    icon: "fa-solid fa-layer-group",
+                    color: "#22d3ee",
+                },
+            ],
+        ].concat(
+            Object.entries(UNIVERSES).filter(([key]) =>
+                usedUniverses.includes(key),
+            ),
+        );
+
+        filtersContainer.innerHTML = "";
+
+        buttons.forEach(([key, universe]) => {
+            const isActive = key === active;
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className =
+                "inline-flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition";
+
+            // Bouton actif : plein ; bouton inactif : contour coloré
+            button.style.color = isActive ? "#090b10" : universe.color;
+            button.style.background = isActive
+                ? universe.color
+                : "rgba(255,255,255,0.04)";
+            button.style.borderColor = isActive
+                ? universe.color
+                : `${universe.color}40`;
+            button.innerHTML = `<i class="${universe.icon}"></i> ${esc(universe.label)}`;
+
+            button.addEventListener("click", () => {
+                active = key;
+
+                // Met à jour l'adresse sans recharger la page
+                const url = new URL(window.location);
+                if (key === "all") url.searchParams.delete("u");
+                else url.searchParams.set("u", key);
+                history.replaceState(null, "", url);
+
+                renderFilters();
+                renderCards();
+            });
+
+            filtersContainer.appendChild(button);
+        });
+    }
+
+    // --- Les cartes ---
+    function renderCards() {
+        const visible = creations.filter(
+            (c) => active === "all" || c.universe === active,
+        );
+        const done = visible.filter((c) => c.status === "termine");
+        const next = visible.filter((c) => c.status !== "termine");
 
         doneContainer.innerHTML = "";
         nextContainer.innerHTML = "";
@@ -459,13 +531,13 @@ async function loadProjects() {
         next.forEach((c) => nextContainer.appendChild(creationCard(c)));
 
         if (!done.length)
-            doneContainer.innerHTML = `<p class="text-gray-500">Rien de terminé pour l'instant.</p>`;
+            doneContainer.innerHTML = `<p class="text-gray-500">Rien de terminé dans cet univers pour l'instant.</p>`;
         if (!next.length)
-            nextContainer.innerHTML = `<p class="text-gray-500">Rien en préparation pour l'instant.</p>`;
-    } catch (error) {
-        console.error("Erreur créations :", error);
-        doneContainer.innerHTML = `<p class="text-red-400">Erreur lors du chargement des créations.</p>`;
+            nextContainer.innerHTML = `<p class="text-gray-500">Rien en préparation dans cet univers pour l'instant.</p>`;
     }
+
+    renderFilters();
+    renderCards();
 }
 
 /////////// page contact //////////
