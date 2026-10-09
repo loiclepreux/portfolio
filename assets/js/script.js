@@ -426,18 +426,31 @@ function badge(label, color) {
         </span>`;
 }
 
-// L'image de la carte, ou un visuel généré si la création n'a pas d'image
-function creationVisual(project) {
+// L'image d'une création, ou un visuel généré si elle n'en a pas.
+// mode "card"   : bandeau rogné (cartes de la page Créations)
+// mode "detail" : image entière, sans rognage (page détail)
+function creationVisual(project, mode = "card") {
     const universe = getUniverse(project.universe);
 
     if (project.image_path) {
+        if (mode === "detail") {
+            return `
+                <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
+                    class="mx-auto block max-h-[70vh] w-auto max-w-full" />`;
+        }
+
+        // Image en hauteur (couverture de livre…) : on cadre sur le haut, là où est le titre
         return `
             <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
-                class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />`;
+                class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                onload="if (this.naturalHeight > this.naturalWidth) this.classList.add('object-top')" />`;
     }
 
+    // Pas d'image : icône de l'univers sur fond coloré
+    const size = mode === "detail" ? "h-64 md:h-80" : "h-full";
+
     return `
-        <div class="flex h-full w-full items-center justify-center"
+        <div class="flex ${size} w-full items-center justify-center"
             style="background: radial-gradient(circle at 30% 20%, ${universe.color}33, transparent 60%), #0b0d12;">
             <i class="${universe.icon} text-5xl" style="color:${universe.color}"></i>
         </div>`;
@@ -648,8 +661,8 @@ async function loadCreationDetail() {
 
         ${creation.stack ? `<p class="mb-8 text-sm" style="color:${universe.color}">${esc(creation.stack)}</p>` : ""}
 
-        <div class="group mb-10 h-64 overflow-hidden rounded-[1.8rem] border border-white/5 md:h-80">
-            ${creationVisual(creation)}
+        <div class="mb-10 overflow-hidden rounded-[1.8rem] border border-white/5 bg-[#0b0d12]">
+            ${creationVisual(creation, "detail")}
         </div>
 
         <p class="mb-8 text-lg leading-8 text-gray-200">${esc(creation.description)}</p>
