@@ -331,6 +331,9 @@
   .mt-\[7px\] {
     margin-top: 7px;
   }
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
+  }
   .mr-24 {
     margin-right: calc(var(--spacing) * 24);
   }
