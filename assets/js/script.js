@@ -214,6 +214,18 @@ async function loadProfile() {
 
 /////////// page skills ///////////
 
+// Catégories affichées en étiquettes plutôt qu'en cartes avec niveau
+const TAG_CATEGORIES = ["Savoir-être", "Conduite & transport"];
+
+// Traduit un niveau 0-100 en mots + nombre de points allumés (sur 3)
+function skillLevel(level) {
+    const value = Number(level) || 0;
+
+    if (value >= 80) return { label: "Maîtrisé", dots: 3 };
+    if (value >= 50) return { label: "Utilisé régulièrement", dots: 2 };
+    return { label: "En apprentissage", dots: 1 };
+}
+
 async function loadSkills() {
     const container = document.getElementById("skillsContainer");
     const totalSkills = document.getElementById("totalSkills");
@@ -230,7 +242,7 @@ async function loadSkills() {
             totalSkills.innerHTML = `
                 <span class="text-2xl font-bold text-cyan-300">${skills.length}</span>
                 <span class="text-sm uppercase tracking-[0.2em] text-gray-400">
-                    technologies utilisées
+                    compétences
                 </span>
             `;
         }
@@ -256,45 +268,63 @@ async function loadSkills() {
                 <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-300">
                     🛠️
                 </div>
-                <h2 class="text-2xl font-semibold text-cyan-300">${category}</h2>
+                <h2 class="text-2xl font-semibold text-cyan-300">${esc(category)}</h2>
             `;
+
+            // Certaines catégories s'affichent en simples étiquettes, sans niveau
+            if (TAG_CATEGORIES.includes(category)) {
+                const tags = document.createElement("div");
+                tags.className = "flex flex-wrap gap-3";
+
+                tags.innerHTML = grouped[category]
+                    .map(
+                        (skill) => `
+                        <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-gray-200">
+                            <i class="${esc(skill.icon_class)}" style="color:${skill.color}"></i>
+                            ${esc(skill.name)}
+                        </span>`,
+                    )
+                    .join("");
+
+                section.appendChild(header);
+                section.appendChild(tags);
+                container.appendChild(section);
+                continue; // passe à la catégorie suivante, sans créer de cartes
+            }
 
             const grid = document.createElement("div");
             grid.className =
                 "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center";
 
             grouped[category].forEach((skill) => {
-                const level = skill.level ?? 50;
-
                 const article = document.createElement("article");
                 article.className =
                     "rounded-[1.6rem] border border-cyan-500/10 bg-[#11141c] p-6 shadow-[0_0_20px_rgba(0,255,255,0.03)]";
 
+                const { label, dots } = skillLevel(skill.level);
+
+                // 3 petits segments : allumés à la couleur de la compétence, sinon grisés
+                const indicator = [1, 2, 3]
+                    .map(
+                        (n) => `<span class="h-1.5 flex-1 rounded-full"
+                        style="background:${n <= dots ? skill.color : "rgba(255,255,255,0.08)"}"></span>`,
+                    )
+                    .join("");
+
                 article.innerHTML = `
-                    <div class="mb-4 flex items-center gap-4">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5"
+                    <div class="mb-5 flex items-center gap-4">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5"
                             style="color:${skill.color}">
-                            <i class="${skill.icon_class} text-lg"></i>
+                            <i class="${esc(skill.icon_class)} text-lg"></i>
                         </div>
 
                         <div>
-                            <h3 class="text-lg font-semibold text-white">${skill.name}</h3>
-                            <p class="text-sm text-gray-500">Technologie</p>
+                            <h3 class="text-lg font-semibold text-white">${esc(skill.name)}</h3>
+                            <p class="text-sm text-gray-400">${label}</p>
                         </div>
                     </div>
 
-                    <p class="mb-4 text-sm text-gray-400">${skill.category}</p>
-
-                    <div class="mb-1 flex items-center justify-between text-xs text-gray-400">
-                        <span>Niveau</span>
-                        <span>${level}%</span>
-                    </div>
-
-                    <div class="h-2 w-full rounded bg-[#0b0d12]">
-                        <div class="h-2 rounded"
-                            style="width:${level}%; background:${skill.color}">
-                        </div>
-                    </div>
+                    <div class="flex gap-1.5">${indicator}</div>
                 `;
 
                 grid.appendChild(article);
