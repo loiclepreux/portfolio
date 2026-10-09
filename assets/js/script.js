@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initNavbarActiveState() {
     const params = new URLSearchParams(window.location.search);
-    const currentPage = params.get("p") || "home";
+    const page = params.get("p") || "home";
+    // Une page détail de création allume l'icône "Créations"
+    const currentPage = page === "creation" ? "project" : page;
 
     const navLinks = document.querySelectorAll("nav a[data-page]");
 
