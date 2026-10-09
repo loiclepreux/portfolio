@@ -49,25 +49,26 @@ class ProjectModel
     public function createProject(array $data): void
     {
         $stmt = $this->db->prepare("
-        INSERT INTO projects
-        (title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at)
-        VALUES
-        (:title, :description, :content, :type, :universe, :status, :stack, :live_url, :github_url, :image_path, :is_published, :sort_order, NOW())
-    ");
+            INSERT INTO projects
+            (title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at)
+            VALUES
+            (:title, :description, :content, :type, :universe, :status, :stack, :live_url, :github_url, :image_path, :image_position, :is_published, :sort_order, NOW())
+        ");
 
         $stmt->execute([
-            'title' => $data['title'] ?? '',
-            'description' => $data['description'] ?? '',
-            'type' => $data['type'] ?? 'personal',
-            'stack' => $data['stack'] ?? '',
-            'live_url' => $data['live_url'] ?? null,
-            'image_path' => $data['image_path'] ?? '',
-            'is_published' => $data['is_published'] ?? 1,
-            'sort_order' => $data['sort_order'] ?? 0,
-            'content' => $data['content'] ?? null,
-            'universe' => $data['universe'] ?? 'dev',
-            'status' => $data['status'] ?? 'termine',
-            'github_url' => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
+            'title'          => $data['title'] ?? '',
+            'description'    => $data['description'] ?? '',
+            'content'        => $data['content'] ?? null,
+            'type'           => $data['type'] ?? 'personal',
+            'universe'       => $data['universe'] ?? 'dev',
+            'status'         => $data['status'] ?? 'termine',
+            'stack'          => $data['stack'] ?? '',
+            'live_url'       => ($data['live_url'] ?? '') !== '' ? $data['live_url'] : null,
+            'github_url'     => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
+            'image_path'     => $data['image_path'] ?? '',
+            'image_position' => ($data['image_position'] ?? '') !== '' ? $data['image_position'] : null,
+            'is_published'   => $data['is_published'] ?? 1,
+            'sort_order'     => $data['sort_order'] ?? 0,
         ]);
     }
 
@@ -84,9 +85,9 @@ class ProjectModel
                 live_url     = :live_url,
                 github_url   = :github_url,
                 image_path   = :image_path,
-                image_position = :image_position
+                image_position = :image_position,
                 is_published = :is_published,
-                sort_order   = :sort_order
+                sort_order   = :sort_order,
             WHERE id = :id
         ");
 
