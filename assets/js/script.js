@@ -439,6 +439,17 @@ function creationVisual(project, mode = "card") {
                     class="mx-auto block max-h-[70vh] w-auto max-w-full" />`;
         }
 
+        // Mode logo : logo entier et centré, sur un fond flou de ses propres couleurs
+        if (project.image_position === "logo") {
+            return `
+                <div class="relative h-full w-full overflow-hidden bg-[#0b0d12]">
+                    <img src="${esc(project.image_path)}" alt="" aria-hidden="true"
+                        class="absolute inset-0 h-full w-full scale-150 object-cover opacity-50 blur-2xl" />
+                    <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
+                        class="relative mx-auto h-full w-auto object-contain p-6 drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] transition duration-500 group-hover:scale-110" />
+                </div>`;
+        }
+
         // Cadrage choisi dans l'admin, sinon automatique (haut pour les images en hauteur)
         const position = project.image_position
             ? `style="object-position:${esc(project.image_position)}"`
@@ -448,16 +459,16 @@ function creationVisual(project, mode = "card") {
             <img src="${esc(project.image_path)}" alt="${esc(project.title)}"
                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 ${position} />`;
+    } // ← fin du "if (project.image_path)" : tout ce qui suit concerne les créations SANS image
 
-        // Pas d'image : icône de l'univers sur fond coloré
-        const size = mode === "detail" ? "h-64 md:h-80" : "h-full";
+    // Pas d'image : icône de l'univers sur fond coloré
+    const size = mode === "detail" ? "h-64 md:h-80" : "h-full";
 
-        return `
+    return `
         <div class="flex ${size} w-full items-center justify-center"
             style="background: radial-gradient(circle at 30% 20%, ${universe.color}33, transparent 60%), #0b0d12;">
             <i class="${universe.icon} text-5xl" style="color:${universe.color}"></i>
         </div>`;
-    }
 }
 
 // Fabrique une carte de création
