@@ -25,5 +25,5 @@ try {
 
     echo json_encode(['success' => true]);
 } catch (\Throwable $e) {
-    echo json_encode(['error' => true, 'message' => 'Erreur serveur']);
+    echo json_encode(['error' => true, 'message' => $e->getMessage()]);
 }
