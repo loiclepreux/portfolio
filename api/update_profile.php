@@ -1,46 +1,29 @@
 <?php
 session_start();
-require_once '../config/database.php';
+header('Content-Type: application/json; charset=utf-8');
 
-header('Content-Type: application/json');
-
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => true]);
+// Seul un admin connecté peut modifier le profil
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+    echo json_encode(['error' => true, 'message' => 'Accès refusé']);
     exit;
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+require_once __DIR__ . '/../models/ProfileModel.php';
+
+use monApp\models\ProfileModel;
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!$data) {
+    echo json_encode(['error' => true, 'message' => 'Données invalides']);
+    exit;
+}
 
 try {
-    $stmt = $pdo->prepare("
-        UPDATE profile SET
-        firstname = :firstname,
-        lastname = :lastname,
-        email = :email,
-        phone = :phone,
-        linkedin_url = :linkedin_url,
-        location = :location,
-        specialty = :specialty,
-        profile_image = :profile_image,
-        stack = :stack,
-        objective = :objective
-        WHERE id = 1
-    ");
-
-    $stmt->execute([
-        'firstname' => $data['firstname'],
-        'lastname' => $data['lastname'],
-        'email' => $data['email'],
-        'phone' => $data['phone'],
-        'linkedin_url' => $data['linkedin_url'],
-        'location' => $data['location'],
-        'specialty' => $data['specialty'],
-        'profile_image' => $data['profile_image'],
-        'stack' => $data['stack'],
-        'objective' => $data['objective'],
-    ]);
+    $model = new ProfileModel();
+    $model->updateProfile($data);
 
     echo json_encode(['success' => true]);
-} catch (Exception $e) {
+} catch (\Throwable $e) {
     echo json_encode(['error' => true, 'message' => 'Erreur serveur']);
 }
