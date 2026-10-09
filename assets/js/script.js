@@ -53,7 +53,7 @@ function initNavbarActiveState() {
 
             const indicator = document.createElement("span");
             indicator.className =
-                "active-indicator absolute -left-2 top-1/2 -translate-y-1/2 h-6 w-[3px] rounded bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]";
+                "active-indicator absolute -top-2 left-1/2 h-[3px] w-6 -translate-x-1/2 rounded bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)] md:-left-2 md:top-1/2 md:h-6 md:w-[3px] md:translate-x-0 md:-translate-y-1/2";
 
             link.prepend(indicator);
         }

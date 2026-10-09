@@ -15,17 +15,17 @@
         <script src="assets/js/script.js" defer></script>
         <link rel="stylesheet" href="assets/css/style.css" />
     </head>
-    <body>
+    
+    <body class="pb-16 md:pb-0">
         <aside
-            class="fixed right-0 top-0 z-50 flex h-screen w-24 flex-col items-center justify-center border-l border-cyan-500/10 bg-[#0b0d12]"
+                        class="fixed inset-x-0 bottom-0 z-50 flex h-16 items-center justify-center border-t border-cyan-500/10 bg-[#0b0d12]/95 backdrop-blur md:inset-x-auto md:right-0 md:top-0 md:h-screen md:w-24 md:flex-col md:border-l md:border-t-0 md:bg-[#0b0d12]"
         >
             <div
-                class="mb-10 rotate-90 text-xs font-semibold tracking-[0.45em] text-cyan-400"
-            >
+                class="hidden md:block mb-10 rotate-90 text-xs font-semibold tracking-[0.45em] text-cyan-400">
                 LOÏC
             </div>
 
-            <nav class="flex flex-col items-center gap-5">
+            <nav class="flex items-center gap-2 md:flex-col md:gap-5">
                 <a
                     href="index.php?p="
                     data-page="home"
