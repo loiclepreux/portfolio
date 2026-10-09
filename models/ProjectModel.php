@@ -87,7 +87,7 @@ class ProjectModel
                 image_path   = :image_path,
                 image_position = :image_position,
                 is_published = :is_published,
-                sort_order   = :sort_order,
+                sort_order   = :sort_order
             WHERE id = :id
         ");
 
