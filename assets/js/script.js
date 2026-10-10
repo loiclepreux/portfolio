@@ -64,22 +64,55 @@ function initNavbarActiveState() {
 
 function initLoginModal() {
     const openBtn = document.getElementById("open-login-modal");
-    const closeBtn = document.getElementById("close-login-modal");
     const modal = document.getElementById("login-modal");
+
+    if (!openBtn) return;
+
+    // La fenêtre de connexion n'existe que sur l'accueil.
+    // Ailleurs, le bouton renvoie vers l'accueil en demandant de l'ouvrir.
+    if (!modal) {
+        openBtn.addEventListener("click", () => {
+            window.location.href = "index.php?login=1";
+        });
+        return;
+    }
+
+    const closeBtn = document.getElementById("close-login-modal");
     const form = document.getElementById("loginForm");
     const message = document.getElementById("loginMessage");
 
-    if (!openBtn || !closeBtn || !modal || !form || !message) return;
+    if (!closeBtn || !form || !message) return;
 
-    openBtn.addEventListener("click", () => {
+    const openModal = () => {
         modal.classList.remove("hidden");
         modal.classList.add("flex");
-    });
+    };
 
-    closeBtn.addEventListener("click", () => {
+    const closeModal = () => {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
+    };
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+
+    // Échap ferme la fenêtre
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
     });
+
+    // Arrivée depuis une autre page avec ?login=1 : on ouvre directement
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("login") === "1") {
+        openModal();
+        params.delete("login");
+        const query = params.toString();
+        history.replaceState(
+            null,
+            "",
+            query ? `?${query}` : window.location.pathname,
+        );
+    }
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
