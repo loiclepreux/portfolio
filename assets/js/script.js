@@ -472,38 +472,72 @@ function creationVisual(project, mode = "card") {
 }
 
 // Fabrique une carte de création
+// Libellé du bouton quand la création est en ligne, selon l'univers
+const TRY_LABELS = {
+    gaming: { label: "Regarder", icon: "fa-solid fa-play" },
+    ecriture: { label: "Lire", icon: "fa-solid fa-book-open" },
+};
+
 function creationCard(project) {
     const universe = getUniverse(project.universe);
     const status = getStatus(project.status);
+    const liveUrl = safeUrl(project.live_url);
+    const tryLink = TRY_LABELS[project.universe] || {
+        label: "Essayer",
+        icon: "fa-solid fa-play",
+    };
 
     const article = document.createElement("article");
     article.className =
         "group relative overflow-hidden rounded-[1.8rem] border border-white/5 bg-[#11141c] transition duration-300 hover:-translate-y-1";
 
     article.innerHTML = `
-        <a href="index.php?p=creation&id=${encodeURIComponent(project.id)}" class="block">
-            <div class="relative h-40 w-full overflow-hidden">
-                ${creationVisual(project)}
-                <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
+        <div class="relative h-40 w-full overflow-hidden">
+            ${creationVisual(project)}
+            <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
+            ${
+                liveUrl
+                    ? `<span class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-[#4ade80]/40 bg-[#090b10]/80 px-3 py-1 text-xs font-semibold text-[#4ade80] backdrop-blur">
+                           <span class="h-2 w-2 animate-pulse rounded-full bg-[#4ade80]"></span>
+                           En ligne
+                       </span>`
+                    : ""
+            }
+        </div>
+
+        <div class="p-7">
+            <div class="mb-4 flex flex-wrap gap-2">
+                ${badge(universe.label, universe.color)}
+                ${badge(status.label, status.color)}
             </div>
 
-            <div class="p-7">
-                <div class="mb-4 flex flex-wrap gap-2">
-                    ${badge(universe.label, universe.color)}
-                    ${badge(status.label, status.color)}
-                </div>
+            <h3 class="text-xl font-semibold text-white">
+                <a href="index.php?p=creation&id=${encodeURIComponent(project.id)}"
+                   class="after:absolute after:inset-0 after:content-['']">
+                    ${esc(project.title)}
+                </a>
+            </h3>
 
-                <h3 class="text-xl font-semibold text-white">${esc(project.title)}</h3>
+            ${project.stack ? `<p class="mt-2 text-sm" style="color:${universe.color}">${esc(project.stack)}</p>` : ""}
 
-                ${project.stack ? `<p class="mt-2 text-sm" style="color:${universe.color}">${esc(project.stack)}</p>` : ""}
+            <p class="mt-4 text-sm leading-7 text-gray-400">${esc(project.description)}</p>
 
-                <p class="mt-4 text-sm leading-7 text-gray-400">${esc(project.description)}</p>
-
-                <p class="mt-6 inline-flex items-center gap-2 text-sm font-medium" style="color:${universe.color}">
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+                <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:${universe.color}">
                     En savoir plus <i class="fa-solid fa-arrow-right text-xs"></i>
-                </p>
+                </span>
+
+                ${
+                    liveUrl
+                        ? `<a href="${esc(liveUrl)}" target="_blank" rel="noopener noreferrer"
+                              class="relative z-10 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-[#090b10] transition hover:scale-105"
+                              style="background:${universe.color}">
+                               <i class="${tryLink.icon} text-xs"></i> ${tryLink.label}
+                           </a>`
+                        : ""
+                }
             </div>
-        </a>
+        </div>
     `;
 
     // La bordure prend la couleur de l'univers au survol
