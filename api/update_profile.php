@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/securite.php'; // session protégée
+exiger_admin(); // admin connecté + protection CSRF
 header('Content-Type: application/json; charset=utf-8');
 
 // Seul un admin connecté peut modifier le profil

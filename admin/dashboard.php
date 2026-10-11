@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/../api/securite.php'; // session protégée
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header('Location: ../index.php?p=');

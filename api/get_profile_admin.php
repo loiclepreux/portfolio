@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/securite.php'; // session protégée
+exiger_admin(); // admin connecté + protection CSRF
 header('Content-Type: application/json; charset=utf-8');
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {

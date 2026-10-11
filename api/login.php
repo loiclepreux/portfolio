@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/securite.php'; // session protégée
 
 header('Content-Type: application/json');
 
@@ -26,33 +26,33 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
+// Anti force brute : 5 erreurs par adresse IP = 15 minutes d'attente
+$attente = limite_attente();
+if ($attente > 0) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Trop de tentatives. Réessaie dans ' . ceil($attente / 60) . ' minute(s).'
+    ]);
+    exit;
+}
+
 try {
     $userModel = new UserModel();
     $user = $userModel->findByEmail($email);
 
-    if (!$user) {
+    // Même message dans tous les cas : on ne dit pas si l'email existe
+    if (!$user || !password_verify($password, $user['password']) || $user['role'] !== 'admin') {
+        limite_echec();
         echo json_encode([
             'success' => false,
-            'message' => 'Utilisateur introuvable'
+            'message' => 'Identifiants incorrects'
         ]);
         exit;
     }
 
-    if (!password_verify($password, $user['password'])) {
-        echo json_encode([
-            'success' => false,
-            'message' => 'Mot de passe incorrect'
-        ]);
-        exit;
-    }
-
-    if ($user['role'] !== 'admin') {
-        echo json_encode([
-            'success' => false,
-            'message' => 'Accès refusé'
-        ]);
-        exit;
-    }
+    // Nouvel identifiant de session à la connexion (anti vol de session)
+    limite_reset();
+    session_regenerate_id(true);
 
     // 🔐 SESSION
     $_SESSION['user_id'] = $user['id'];

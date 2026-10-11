@@ -1,0 +1,28 @@
+# =========================================================
+#  Portfolio — sécurité du serveur
+# =========================================================
+
+# Pas de liste des fichiers quand on ouvre un dossier
+Options -Indexes
+
+# Toujours en HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Fichiers cachés (.env, .git...) : introuvables
+# (sauf .well-known, utilisé par Hostinger pour le certificat HTTPS)
+RedirectMatch 404 /\.(?!well-known)
+
+# Le code PHP interne, la config et les dépendances : pas accessibles depuis le navigateur
+# (seuls index.php, api/, admin/ et assets/ sont publics)
+RedirectMatch 404 ^/(config|core|models|controllers|views|database|vendor|front|node_modules)(/|$)
+RedirectMatch 404 ^/(composer\.(json|lock)|package(-lock)?\.json|README\.md|api/securite\.php)$
+
+# En-têtes de sécurité envoyés au navigateur
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
