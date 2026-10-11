@@ -27,7 +27,7 @@ class ProjectModel
     public function getAllProjects(): array
     {
         $stmt = $this->db->query("
-            SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
+            SELECT id, title, description, content, type, universe, status, nature, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
             FROM projects
             ORDER BY type ASC, sort_order ASC
         ");
@@ -38,7 +38,7 @@ class ProjectModel
     public function getAllProjectsAdmin(): array
     {
         $stmt = $this->db->query("
-        SELECT id, title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
+        SELECT id, title, description, content, type, universe, status, nature, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at
         FROM projects
         ORDER BY type ASC, sort_order ASC
     ");
@@ -50,9 +50,9 @@ class ProjectModel
     {
         $stmt = $this->db->prepare("
             INSERT INTO projects
-            (title, description, content, type, universe, status, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at)
+            (title, description, content, type, universe, status, nature, stack, live_url, github_url, image_path, image_position, is_published, sort_order, created_at)
             VALUES
-            (:title, :description, :content, :type, :universe, :status, :stack, :live_url, :github_url, :image_path, :image_position, :is_published, :sort_order, NOW())
+            (:title, :description, :content, :type, :universe, :status, :nature, :stack, :live_url, :github_url, :image_path, :image_position, :is_published, :sort_order, NOW())
         ");
 
         $stmt->execute([
@@ -62,6 +62,7 @@ class ProjectModel
             'type'           => $data['type'] ?? 'personal',
             'universe'       => $data['universe'] ?? 'dev',
             'status'         => $data['status'] ?? 'termine',
+            'nature'         => self::nature($data),
             'stack'          => $data['stack'] ?? '',
             'live_url'       => ($data['live_url'] ?? '') !== '' ? $data['live_url'] : null,
             'github_url'     => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
@@ -81,6 +82,7 @@ class ProjectModel
                 content      = :content,
                 universe     = :universe,
                 status       = :status,
+                nature       = :nature,
                 stack        = :stack,
                 live_url     = :live_url,
                 github_url   = :github_url,
@@ -98,6 +100,7 @@ class ProjectModel
             'content'      => $data['content'] ?? null,
             'universe'     => $data['universe'] ?? 'dev',
             'status'       => $data['status'] ?? 'termine',
+            'nature'       => self::nature($data),
             'stack'        => $data['stack'] ?? '',
             'live_url'     => ($data['live_url'] ?? '') !== '' ? $data['live_url'] : null,
             'github_url'   => ($data['github_url'] ?? '') !== '' ? $data['github_url'] : null,
@@ -106,6 +109,12 @@ class ProjectModel
             'is_published' => $data['is_published'] ?? 1,
             'sort_order'   => $data['sort_order'] ?? 0,
         ]);
+    }
+
+    // Projet fictif (exercice, démo) ou réel (vraiment utilisé) : seules ces valeurs sont acceptées
+    private static function nature(array $data): string
+    {
+        return in_array($data['nature'] ?? '', ['fictif', 'reel'], true) ? $data['nature'] : 'fictif';
     }
 
     public function deleteProject(int $id): void

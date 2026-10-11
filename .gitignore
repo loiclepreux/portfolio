@@ -1,6 +1,7 @@
 # Identifiants (ne jamais publier)
 config/config.php
 .env
+*.zip
 
 # Dépendances
 node_modules/

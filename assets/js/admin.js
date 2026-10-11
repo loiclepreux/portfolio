@@ -139,7 +139,7 @@ async function loadAdminProjects() {
                 <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div>
                         <h4 class="text-lg font-semibold text-white">${project.title}</h4>
-                        <p class="mt-1 text-sm text-cyan-300">${project.universe} · ${project.status}</p>
+                        <p class="mt-1 text-sm text-cyan-300">${project.universe} · ${project.status} · ${project.nature === "reel" ? "réel" : "fictif"}</p>
                         <p class="mt-3 text-sm text-gray-400">${project.description}</p>
                         <p class="mt-3 text-sm text-gray-500">Stack : ${project.stack}</p>
                         <p class="mt-1 text-sm text-gray-500">Ordre : ${project.sort_order}</p>
@@ -420,6 +420,7 @@ const PROJECT_FIELDS = [
     "title",
     "universe",
     "status",
+    "nature",
     "description",
     "content",
     "stack",

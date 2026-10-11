@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/admin.js" defer></script>
+    <script src="../assets/js/admin.js?v=2" defer></script>
 </head>
 
 <body class="min-h-screen bg-[#090b10] text-white">
@@ -211,6 +211,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                     </select>
                 </div>
 
+                <div>
+                    <label class="mb-2 block text-sm text-gray-300">Nature du projet</label>
+                    <select name="nature"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white">
+                        <option value="fictif">Fictif (exercice, démo)</option>
+                        <option value="reel">Réel (vraiment utilisé)</option>
+                    </select>
+                </div>
+
                 <div class="md:col-span-2">
                     <label class="mb-2 block text-sm text-gray-300">Texte détaillé</label>
                     <textarea name="content" rows="8"
@@ -382,4 +391,4 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     </main>
 </body>
 
-</html>
+</html>

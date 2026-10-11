@@ -418,6 +418,26 @@ const STATUSES = {
     idee: { label: "À venir", color: "#94a3b8" },
 };
 
+// Projet fictif (exercice, démo) ou réel (vraiment utilisé) — choisi dans l'admin
+const NATURES = {
+    fictif: {
+        label: "Projet fictif",
+        icon: "fa-solid fa-flask",
+        color: "#94a3b8",
+        text: "Projet d'entraînement : les données, les commandes et les clients sont fictifs.",
+    },
+    reel: {
+        label: "Projet réel",
+        icon: "fa-solid fa-circle-check",
+        color: "#fb923c",
+        text: "Projet réellement utilisé, avec de vrais utilisateurs.",
+    },
+};
+
+function getNature(key) {
+    return NATURES[key] || NATURES.fictif;
+}
+
 function getUniverse(key) {
     return UNIVERSES[key] || UNIVERSES.autre;
 }
@@ -514,6 +534,7 @@ const TRY_LABELS = {
 function creationCard(project) {
     const universe = getUniverse(project.universe);
     const status = getStatus(project.status);
+    const nature = getNature(project.nature);
     const liveUrl = safeUrl(project.live_url);
     const tryLink = TRY_LABELS[project.universe] || {
         label: "Essayer",
@@ -528,6 +549,11 @@ function creationCard(project) {
         <div class="relative h-40 w-full overflow-hidden">
             ${creationVisual(project)}
             <div class="absolute inset-0 bg-gradient-to-t from-[#090b10]/90 via-[#090b10]/20 to-transparent"></div>
+            <span class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border bg-[#090b10]/80 px-3 py-1 text-xs font-semibold backdrop-blur"
+                style="color:${nature.color}; border-color:${nature.color}66;" title="${esc(nature.text)}">
+                <i class="${nature.icon} text-[10px]"></i>
+                ${esc(nature.label)}
+            </span>
             ${
                 liveUrl
                     ? `<span class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-[#4ade80]/40 bg-[#090b10]/80 px-3 py-1 text-xs font-semibold text-[#4ade80] backdrop-blur">
@@ -720,6 +746,7 @@ async function loadCreationDetail() {
 
     const universe = getUniverse(creation.universe);
     const status = getStatus(creation.status);
+    const nature = getNature(creation.nature);
     const link = safeUrl(creation.live_url);
     const codeLink = safeUrl(creation.github_url);
 
@@ -737,11 +764,16 @@ async function loadCreationDetail() {
         <div class="mb-6 flex flex-wrap gap-2">
             ${badge(universe.label, universe.color)}
             ${badge(status.label, status.color)}
+            ${badge(nature.label, nature.color)}
         </div>
 
         <h1 class="mb-4 text-4xl font-bold text-white md:text-5xl">${esc(creation.title)}</h1>
 
         ${creation.stack ? `<p class="mb-8 text-sm" style="color:${universe.color}">${esc(creation.stack)}</p>` : ""}
+
+        <p class="mb-8 -mt-4 flex items-center gap-2 text-sm text-gray-400">
+            <i class="${nature.icon}" style="color:${nature.color}"></i> ${esc(nature.text)}
+        </p>
 
         <div class="mb-10 overflow-hidden rounded-[1.8rem] border border-white/5 bg-[#0b0d12]">
             ${creationVisual(creation, "detail")}
