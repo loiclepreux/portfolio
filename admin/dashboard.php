@@ -221,10 +221,20 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm text-gray-300">Texte détaillé</label>
+                    <label class="mb-2 block text-sm text-gray-300">Description courte (affichée sur la carte)</label>
+                    <input
+                        type="text"
+                        name="description"
+                        maxlength="255"
+                        class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
+                        placeholder="Une phrase qui résume le projet" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="mb-2 block text-sm text-gray-300">Texte détaillé (page « En savoir plus »)</label>
                     <textarea name="content" rows="8"
                         class="w-full rounded-2xl border border-cyan-500/15 bg-[#0b0d12] px-4 py-3 text-white"
-                        placeholder="Description courte (affichée sur la carte)"></textarea>
+                        placeholder="Présentation complète du projet. Une ligne vide = un nouveau paragraphe."></textarea>
                 </div>
 
                 <div>
@@ -391,4 +401,4 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     </main>
 </body>
 
-</html>
+</html>
